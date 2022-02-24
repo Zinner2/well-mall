@@ -32,4 +32,5 @@ public class UserAdminController {
     public UserDto loadByUserName(String username) {
         return userAdminService.loadUserByUsername(username);
     }
+
 }

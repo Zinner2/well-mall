@@ -1,6 +1,7 @@
 package com.jj.mall.admin.service;
 
 import com.jj.mall.common.domain.UserDto;
+import com.jj.mall.model.UmsAdmin;
 
 /**
  *  后台管理员service
@@ -8,6 +9,13 @@ import com.jj.mall.common.domain.UserDto;
  * @date 2022/2/24  - {TIME}
  */
 public interface UserAdminService {
+
+    /**
+     *  获取用户信息
+     * @param username
+     * @return
+     */
+    UmsAdmin getAdminByUsername(String username);
 
     /**
      * 获取用户信息
