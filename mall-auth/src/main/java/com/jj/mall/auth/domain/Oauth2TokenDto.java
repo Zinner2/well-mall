@@ -1,5 +1,6 @@
 package com.jj.mall.auth.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,14 +12,15 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode()
 public class Oauth2TokenDto {
 
     @ApiModelProperty("访问令牌")
     private String token;
-    @ApiModelProperty("")
+    @ApiModelProperty("刷新令牌")
     private String refreshToken;
-
+    @ApiModelProperty("访问令牌头前缀")
     private String tokenHeader;
-
-    private int  expiresIn;
+    @ApiModelProperty(value = "有效时间")
+    private int expiresIn;
+}

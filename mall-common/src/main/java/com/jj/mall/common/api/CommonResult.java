@@ -46,4 +46,13 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> failed(IErrorCode errorCode){
         return new CommonResult<T>(errorCode.getCode(),errorCode.getMessage(),null);
     }
+    /**
+     * 失败返回结果
+     * @param errorMessage
+     * @return
+     * @param <T>
+     */
+    public static <T> CommonResult<T> failed(String errorMessage){
+        return new CommonResult<T>(ResultCode.FAILED.getCode(),errorMessage,null);
+    }
 }
