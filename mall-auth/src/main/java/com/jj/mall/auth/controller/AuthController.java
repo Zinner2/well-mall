@@ -3,7 +3,7 @@ package com.jj.mall.auth.controller;
 import com.jj.mall.auth.domain.Oauth2TokenDto;
 import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.common.constant.AuthConstant;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -31,6 +31,15 @@ public class AuthController {
     @Resource
     private TokenEndpoint tokenEndpoint;
 
+    @ApiOperation("Oauth2获取token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "grant_type", value = "授权模式",required = true),
+            @ApiImplicitParam(name = "client_id", value = "Oauth2客户端Id",required = true),
+            @ApiImplicitParam(name = "client_secret", value = "Oauth2客户端密匙",required = true),
+            @ApiImplicitParam(name = "refresh_token", value = "刷新token"),
+            @ApiImplicitParam(name = "username", value = "登录用户名"),
+            @ApiImplicitParam(name = "password", value = "登录密码")
+    })
     @PostMapping("/token")
     public CommonResult<Oauth2TokenDto> postAccessToken(@ApiIgnore Principal principal,@ApiIgnore @RequestParam Map<String, String> params) throws HttpRequestMethodNotSupportedException {
         OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, params).getBody();

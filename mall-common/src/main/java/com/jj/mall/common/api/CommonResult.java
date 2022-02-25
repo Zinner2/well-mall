@@ -1,10 +1,11 @@
 package com.jj.mall.common.api;
-
+import lombok.Data;
 /**
  * 通用返回对象
  * @author 任人子
  * @date 2022/2/23  - {TIME}
  */
+@Data
 public class CommonResult<T> {
     private long code;
     private String message;
