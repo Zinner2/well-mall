@@ -56,4 +56,12 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> failed(String errorMessage){
         return new CommonResult<T>(ResultCode.FAILED.getCode(),errorMessage,null);
     }
+
+    public static <T> CommonResult<T> forbidden(String message) {
+        return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(),message,null);
+    }
+
+    public static  <T> CommonResult<T>  unauthorized(String message) {
+        return new CommonResult<T>(ResultCode.UNAUTHORIZED.getCode(),message,null);
+    }
 }

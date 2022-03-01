@@ -21,19 +21,29 @@ import java.util.List;
 public abstract class BaseSwaggerConfig {
 
     @Bean
-    public Docket createRestApi(){
+    public Docket createRestApi() {
         SwaggerProperties swaggerProperties = swaggerProperties();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                            .apiInfo(apiInfo(swaggerProperties))
-                            .select()
-                            .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getApiBasePackage()))
-                            .paths(PathSelectors.any())
-                            .build();
-        if(swaggerProperties.isEnableSecurity()){
+                .apiInfo(apiInfo(swaggerProperties))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getApiBasePackage()))
+                .paths(PathSelectors.any())
+                .build();
+        if (swaggerProperties.isEnableSecurity()) {
             docket.securitySchemes(securitySchemes()).securityContexts(securityContexts());
         }
         return docket;
     }
+
+    private ApiInfo apiInfo(SwaggerProperties swaggerProperties) {
+        return new ApiInfoBuilder()
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
+                .contact(new Contact(swaggerProperties.getContactName(), swaggerProperties.getContactUrl(), swaggerProperties.getContactEmail()))
+                .version(swaggerProperties.getVersion())
+                .build();
+    }
+
     private List<ApiKey> securitySchemes() {
         //设置请求头信息
         List<ApiKey> result = new ArrayList<>();
@@ -44,13 +54,13 @@ public abstract class BaseSwaggerConfig {
         return result;
     }
 
-
     private List<SecurityContext> securityContexts() {
         //设置需要登录认证的路径
         List<SecurityContext> result = new ArrayList<>();
         result.add(getContextByPath("/*/.*"));
         return result;
     }
+
     private SecurityContext getContextByPath(String pathRegex) {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
@@ -66,18 +76,6 @@ public abstract class BaseSwaggerConfig {
         authorizationScopes[0] = authorizationScope;
         result.add(new SecurityReference("Authorization", authorizationScopes));
         return result;
-    }
-
-    public ApiInfo apiInfo(SwaggerProperties swaggerProperties){
-        return new ApiInfoBuilder()
-                    .title(swaggerProperties.getTitle())
-                    .description(swaggerProperties.getDescription())
-                    .version(swaggerProperties.getVersion())
-                    .contact(new Contact(swaggerProperties.getContactName(),
-                            swaggerProperties.getContactUrl(),
-                            swaggerProperties.getContactEmail()))
-                    .build();
-
     }
 
 

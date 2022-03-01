@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 全局处理Oauth2抛出的异常
- * @author 任人子
- * @date 2022/2/24  - {TIME}
+ * Created by macro on 2020/7/17.
  */
 @ControllerAdvice
 public class Oauth2ExceptionHandler {
-
     @ResponseBody
-    @ExceptionHandler(OAuth2Exception.class)
-    public CommonResult handleOauth2(OAuth2Exception e){
+    @ExceptionHandler(value = OAuth2Exception.class)
+    public CommonResult handleOauth2(OAuth2Exception e) {
         return CommonResult.failed(e.getMessage());
     }
 }

@@ -1,6 +1,5 @@
 package com.jj.mall.common.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Data;

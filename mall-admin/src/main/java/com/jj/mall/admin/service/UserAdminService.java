@@ -42,4 +42,10 @@ public interface UserAdminService {
      * @return
      */
     CommonResult login(String username, String password);
+
+    /**
+     * 获取当前登录用户信息
+     * @return
+     */
+    UmsAdmin getCurrentAdmin();
 }

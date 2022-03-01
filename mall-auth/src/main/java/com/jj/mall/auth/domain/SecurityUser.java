@@ -11,18 +11,16 @@ import java.util.Collection;
 
 /**
  * 登录用户信息
- * @author 任人子
- * @date 2022/2/24  - {TIME}
  */
 @Data
 public class SecurityUser implements UserDetails {
 
     /**
-     * Id
+     * ID
      */
-    private long id;
+    private Long id;
     /**
-     * 用户名称
+     * 用户名
      */
     private String username;
     /**
@@ -34,7 +32,7 @@ public class SecurityUser implements UserDetails {
      */
     private Boolean enabled;
     /**
-     * 用户客户端ID
+     * 登录客户端ID
      */
     private String clientId;
     /**
@@ -45,17 +43,19 @@ public class SecurityUser implements UserDetails {
     public SecurityUser() {
 
     }
+
     public SecurityUser(UserDto userDto) {
-      this.setId(userDto.getId());
-      this.setUsername(userDto.getUsername());
-      this.setPassword(userDto.getPassword());
-      this.setClientId(userDto.getClientId());
-      this.setEnabled(userDto.getStatus() == 1);
-      if(userDto.getRoles() != null){
-        authorities = new ArrayList<>();
-        userDto.getRoles().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
-      }
+        this.setId(userDto.getId());
+        this.setUsername(userDto.getUsername());
+        this.setPassword(userDto.getPassword());
+        this.setEnabled(userDto.getStatus() == 1);
+        this.setClientId(userDto.getClientId());
+        if (userDto.getRoles() != null) {
+            authorities = new ArrayList<>();
+            userDto.getRoles().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
+        }
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
@@ -90,4 +90,5 @@ public class SecurityUser implements UserDetails {
     public boolean isEnabled() {
         return this.enabled;
     }
+
 }

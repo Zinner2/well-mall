@@ -11,21 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JwtToken 增强器
- * @author 任人子
- * @date 2022/2/24  - {TIME}
+ * JWT内容增强器
+ * Created by macro on 2020/6/19.
  */
 @Component
 public class JwtTokenEnhancer implements TokenEnhancer {
-
     @Override
-    public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
-        SecurityUser  securityUser = (SecurityUser) oAuth2Authentication.getPrincipal();
-        Map<String, Object> information = new HashMap<>(2);
-        information.put("id", securityUser.getId());
-        information.put("client_id", securityUser.getClientId());
-        ((DefaultOAuth2AccessToken)oAuth2AccessToken).setAdditionalInformation(information);
-        return oAuth2AccessToken;
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+        Map<String, Object> info = new HashMap<>();
+        //把用户ID设置到JWT中
+        info.put("id", securityUser.getId());
+        info.put("client_id",securityUser.getClientId());
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
+        return accessToken;
     }
-
 }

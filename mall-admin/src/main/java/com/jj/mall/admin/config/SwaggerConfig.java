@@ -1,4 +1,4 @@
-package com.jj.mall.auth.config;
+package com.jj.mall.admin.config;
 
 import com.jj.mall.common.config.BaseSwaggerConfig;
 import com.jj.mall.common.domain.SwaggerProperties;
@@ -16,10 +16,10 @@ public class SwaggerConfig extends BaseSwaggerConfig {
     @Override
     public SwaggerProperties swaggerProperties() {
         return SwaggerProperties.builder()
-                .apiBasePackage("com.jj.mall.auth.controller")
-                .title("mall认证中心")
-                .Description("mall认证中心相关接口文档")
-                .contactName("macro")
+                .apiBasePackage("com.jj.mall.admin.controller")
+                .title("mall后台系统")
+                .Description("mall后台相关接口文档")
+                .contactName("任人子")
                 .version("1.0")
                 .enableSecurity(true)
                 .build();
