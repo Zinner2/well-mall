@@ -10,12 +10,14 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * JWT内容增强器
- * Created by macro on 2020/6/19.
+ * Jwt 内容增强器
+ * @author 张俊杰
  */
 @Component
 public class JwtTokenEnhancer implements TokenEnhancer {
+
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();

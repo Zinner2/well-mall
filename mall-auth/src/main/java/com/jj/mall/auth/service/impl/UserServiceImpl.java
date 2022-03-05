@@ -1,5 +1,6 @@
 package com.jj.mall.auth.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.jj.mall.auth.constant.MessageConstant;
 import com.jj.mall.auth.domain.SecurityUser;
 import com.jj.mall.auth.service.UmsAdminService;
@@ -13,13 +14,20 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * 用户管理业务类
+ * @author 张俊杰
  */
 @Service
 public class UserServiceImpl implements UserDetailsService {

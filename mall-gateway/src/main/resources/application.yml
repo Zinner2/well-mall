@@ -5,7 +5,7 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: true # 开启从注册中心动态创建路由的功能
           lower-case-service-id: true #使用小写service-id
       routes: #配置路由路径
         - id: mall-auth
@@ -18,24 +18,6 @@ spring:
           uri: lb://mall-admin
           predicates:
             - Path=/mall-admin/**
-          filters:
-            - StripPrefix=1
-        - id: mall-portal
-          uri: lb://mall-portal
-          predicates:
-            - Path=/mall-portal/**
-          filters:
-            - StripPrefix=1
-        - id: mall-search
-          uri: lb://mall-search
-          predicates:
-            - Path=/mall-search/**
-          filters:
-            - StripPrefix=1
-        - id: mall-demo
-          uri: lb://mall-demo
-          predicates:
-            - Path=/mall-demo/**
           filters:
             - StripPrefix=1
   security:

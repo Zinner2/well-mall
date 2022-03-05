@@ -3,7 +3,6 @@ package com.jj.mall.common.service.impl;
 import com.jj.mall.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
