@@ -34,4 +34,6 @@ public interface UmsRoleService {
      * @return
      */
     List<UmsRole> list(String keyword, Integer pageNum, Integer pageSize);
+
+
 }

@@ -21,4 +21,10 @@ public interface UmsAdminCacheService {
      * @return
      */
     void setAdmin(UmsAdmin admin);
+
+    /**
+     * 将redis的指定用户信息删除
+     * @param id
+     */
+    void delAdmin(Long id);
 }

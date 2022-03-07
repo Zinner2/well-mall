@@ -6,6 +6,7 @@ import cn.hutool.crypto.digest.BCrypt;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
 import com.jj.mall.dao.UmsAdminRoleRelationDao;
+import com.jj.mall.dto.UmsAdminParam;
 import com.jj.mall.mapper.UmsAdminRoleRelationMapper;
 import com.jj.mall.model.*;
 import com.jj.mall.service.AuthService;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -168,5 +170,79 @@ public class UserAdminServiceImpl implements UserAdminService {
             adminExample.or().andNickNameLike("%" + keyword + "%");
         }
         return adminMapper.selectByExample(adminExample);
+    }
+
+    @Override
+    public UmsAdmin register(UmsAdminParam adminParam) {
+        UmsAdmin umsAdmin = new UmsAdmin();
+        umsAdmin.setStatus(1);
+        umsAdmin.setCreateTime(new Date());
+        BeanUtils.copyProperties(adminParam, umsAdmin);
+        UmsAdminExample adminExample = new UmsAdminExample();
+        // 查询是否有重名的用户
+        adminExample.createCriteria().andUsernameEqualTo(adminParam.getUsername());
+        List<UmsAdmin> umsAdminList = adminMapper.selectByExample(adminExample);
+        if(umsAdminList.size() > 0) {
+            return null;
+        }
+        umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
+        adminMapper.insert(umsAdmin);
+        return umsAdmin;
+    }
+
+    @Override
+    public int update(UmsAdmin umsAdmin) {
+        UmsAdmin selectAdmin = adminMapper.selectByPrimaryKey(umsAdmin.getId());
+        if(umsAdmin.getPassword().equals(selectAdmin.getPassword())){
+            //与原加密密码相同的不需要修改
+            umsAdmin.setPassword(null);
+        }else{
+            //与原加密密码不同的需要加密修改
+            if(StrUtil.isEmpty(umsAdmin.getPassword())){
+                umsAdmin.setPassword(null);
+            }else{
+                umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
+            }
+        }
+        int result = adminMapper.updateByPrimaryKeySelective(umsAdmin);
+        // 将缓存中的用户信息删除
+        adminCacheService.delAdmin(umsAdmin.getId());
+        return result;
+    }
+
+    @Override
+    public int delete(Long id) {
+        int res = adminMapper.deleteByPrimaryKey(id);
+        adminCacheService.delAdmin(id);
+        return res;
+    }
+
+    @Override
+    public int updateRole(Long adminId, List<Long> roleIds) {
+        int count = roleIds == null ? 0 : roleIds.size();
+
+        UmsAdminRoleRelationExample roleRelationExample = new UmsAdminRoleRelationExample();
+        roleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
+        // 先删除原来关系
+        adminRoleRelationMapper.deleteByExample(roleRelationExample);
+        // 建立新的关系
+        if(!CollectionUtils.isEmpty(roleIds)){
+            List<UmsAdminRoleRelation> relationList = new ArrayList<>();
+            for(Long roleId : roleIds){
+                UmsAdminRoleRelation role = new UmsAdminRoleRelation();
+                role.setRoleId(roleId);
+                role.setAdminId(adminId);
+                relationList.add(role);
+            }
+            adminRoleRelationDao.insertList(relationList);
+        }
+        return count;
+    }
+
+    @Override
+    public int updateStatus(UmsAdmin umsAdmin) {
+        int count = adminMapper.updateByPrimaryKeySelective(umsAdmin);
+        adminCacheService.delAdmin(umsAdmin.getId());
+        return count;
     }
 }

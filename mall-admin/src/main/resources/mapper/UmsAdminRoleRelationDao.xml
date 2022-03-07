@@ -27,4 +27,11 @@
         GROUP BY
             ur.id
     </select>
+    <insert id="insertList">
+        insert  into ums_admin_role_relation (admin_id, role_id)  VALUES
+        <foreach collection="relationList" separator="," item="item" index="index">
+           (#{item.adminId,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=BIGINT})
+        </foreach>
+    </insert>
 </mapper>

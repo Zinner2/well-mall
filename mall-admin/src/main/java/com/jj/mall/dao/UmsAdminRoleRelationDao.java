@@ -1,5 +1,6 @@
 package com.jj.mall.dao;
 
+import com.jj.mall.model.UmsAdminRoleRelation;
 import com.jj.mall.model.UmsResource;
 import com.jj.mall.model.UmsRole;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,11 @@ public interface UmsAdminRoleRelationDao {
      * 获取用户所有可访问资源
      */
     List<UmsResource> getResourceList(@Param("adminId") Long adminId);
- }
+
+    /**
+     *
+     * 批量插入用户角色关系
+     * @param relationList
+     */
+    int insertList(@Param("relationList") List<UmsAdminRoleRelation> relationList);
+}

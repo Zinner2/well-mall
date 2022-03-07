@@ -2,8 +2,10 @@ package com.jj.mall.service;
 
 import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.common.domain.UserDto;
+import com.jj.mall.dto.UmsAdminParam;
 import com.jj.mall.model.UmsAdmin;
 import com.jj.mall.model.UmsRole;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,4 +59,41 @@ public interface UserAdminService {
      * @return
      */
     List<UmsAdmin> list(String keyword, Integer pageNum, Integer pageSize);
+
+    /**
+     * 用户注册
+     * @param adminParam
+     * @return
+     */
+    UmsAdmin register(UmsAdminParam adminParam);
+
+    /**
+     * 修改用户状态
+     * @param umsAdmin
+     * @return
+     */
+    int update(UmsAdmin umsAdmin);
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    int delete(Long id);
+
+    /**
+     * 给用户分配角色
+     * @param adminId
+     * @param roleIds
+     * @return
+     */
+    @Transactional
+    int updateRole(Long adminId, List<Long> roleIds);
+
+    /**
+     * 修改用户状态
+     * @param umsAdmin
+     * @return
+     */
+    int updateStatus(UmsAdmin umsAdmin);
 }

@@ -47,4 +47,5 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         }
         return roleMapper.selectByExample(roleExample);
     }
+
 }

@@ -40,6 +40,15 @@ public class CommonResult<T> {
 
     /**
      * 失败返回结果
+     * @param <T>
+     * @return
+     */
+    public static <T> CommonResult<T> failed(){
+        return new CommonResult<T>(ResultCode.FAILED.getCode(), ResultCode.FAILED.getMessage(),null);
+    }
+
+    /**
+     * 失败返回结果
      * @param errorCode
      * @param <T>
      * @return

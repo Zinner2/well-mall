@@ -3,6 +3,7 @@ package com.jj.mall.controller;
 import cn.hutool.core.collection.CollUtil;
 import com.jj.mall.common.api.CommonPage;
 import com.jj.mall.dto.UmsAdminLoginParam;
+import com.jj.mall.dto.UmsAdminParam;
 import com.jj.mall.model.UmsRole;
 import com.jj.mall.service.UmsRoleService;
 import com.jj.mall.service.UserAdminService;
@@ -10,6 +11,7 @@ import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.common.domain.UserDto;
 import com.jj.mall.model.UmsAdmin;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,59 @@ public class UserAdminController {
     @Resource
     private UmsRoleService roleService;
 
-    
+    @ApiOperation(value = "给用户分配角色")
+    @PostMapping("/role/update")
+    public CommonResult<Integer> updateRole(@RequestParam("adminId") Long adminId,
+                                            @RequestParam("roleIds") List<Long> roleIds){
+        int count = adminService.updateRole(adminId, roleIds);
+        if(count > 0){
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "删除用户")
+    @PostMapping("/delete/{id}")
+    public CommonResult<Integer> delete(@PathVariable Long id){
+        int count = adminService.delete(id);
+        if(count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+    @ApiOperation(value = "修改用户信息")
+    @PostMapping("/update/{id}")
+    public CommonResult<Integer> update(@PathVariable Long id, @RequestBody UmsAdmin umsAdmin){
+        umsAdmin.setId(id);
+        int result = adminService.update(umsAdmin);
+        if(result > 0){
+            return CommonResult.success(result);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "修改用户状态")
+    @PostMapping("/updateStatus/{id}")
+    public CommonResult<Integer> updateStatus(@PathVariable Long id, @RequestParam("status") Integer status){
+        UmsAdmin umsAdmin = new UmsAdmin();
+        umsAdmin.setId(id);
+        umsAdmin.setStatus(status);
+        int count = adminService.updateStatus(umsAdmin);
+        if(count > 0){
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "用户注册")
+    @PostMapping("/register")
+    public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdminParam adminParam) {
+        UmsAdmin admin = adminService.register(adminParam);
+        if(admin == null){
+            return CommonResult.failed();
+        }
+        return CommonResult.success(admin);
+    }
 
     @ApiOperation(value = "获取角色指定用户")
     @GetMapping("/role/{adminId}")
