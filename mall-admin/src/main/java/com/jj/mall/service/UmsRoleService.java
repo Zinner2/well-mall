@@ -1,6 +1,8 @@
 package com.jj.mall.service;
 
+import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.model.UmsMenu;
+import com.jj.mall.model.UmsRole;
 
 import java.util.List;
 
@@ -17,4 +19,19 @@ public interface UmsRoleService {
      * @return
      */
     List<UmsMenu> getMenuList(Long adminId);
+
+    /**
+     * 获取所有角色
+     * @return
+     */
+    List<UmsRole> listAll();
+
+    /**
+     * 分页获取角色列表
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    List<UmsRole> list(String keyword, Integer pageNum, Integer pageSize);
 }

@@ -44,17 +44,17 @@ public class UserAdminServiceImpl implements UserAdminService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAdminServiceImpl.class);
     @Resource
     private UmsAdminMapper adminMapper;
-    @Autowired
+    @Resource
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
-    @Autowired
+    @Resource
     private UmsAdminRoleRelationDao adminRoleRelationDao;
-    @Autowired
+    @Resource
     private UmsAdminLoginLogMapper loginLogMapper;
-    @Autowired
+    @Resource
     private AuthService authService;
-    @Autowired
+    @Resource
     private UmsAdminCacheService adminCacheService;
-    @Autowired
+    @Resource
     private HttpServletRequest request;
 
     @Override
@@ -69,21 +69,19 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
 
-
     @Override
     public CommonResult login(String username, String password) {
-        if(StrUtil.isEmpty(username)||StrUtil.isEmpty(password)){
+        if (StrUtil.isEmpty(username) || StrUtil.isEmpty(password)) {
             Asserts.fail("用户名或密码不能为空！");
         }
         Map<String, String> params = new HashMap<>();
         params.put("client_id", AuthConstant.ADMIN_CLIENT_ID);
-        params.put("client_secret","123456");
-        params.put("grant_type","password");
-        params.put("username",username);
-        params.put("password",password);
+        params.put("client_secret", "123456");
+        params.put("grant_type", "password");
+        params.put("username", username);
+        params.put("password", password);
         CommonResult restResult = authService.getAccessToken(params);
-        if(ResultCode.SUCCESS.getCode()==restResult.getCode()&&restResult.getData()!=null){
-//            updateLoginTimeByUsername(username);
+        if (ResultCode.SUCCESS.getCode() == restResult.getCode() && restResult.getData() != null) {
             insertLoginLog(username);
         }
         return restResult;
@@ -91,11 +89,12 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     /**
      * 添加登录记录
+     *
      * @param username 用户名
      */
     private void insertLoginLog(String username) {
         UmsAdmin admin = getAdminByUsername(username);
-        if(admin==null) {
+        if (admin == null) {
             return;
         }
         UmsAdminLoginLog loginLog = new UmsAdminLoginLog();
@@ -119,30 +118,21 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
 
-
-
-
-
-
-
     @Override
     public List<UmsRole> getRoleList(Long adminId) {
         return adminRoleRelationDao.getRoleList(adminId);
     }
 
 
-
-
-
     @Override
-    public UserDto loadUserByUsername(String username){
+    public UserDto loadUserByUsername(String username) {
         //获取用户信息
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
             List<UmsRole> roleList = getRoleList(admin.getId());
             UserDto userDTO = new UserDto();
-            BeanUtils.copyProperties(admin,userDTO);
-            if(CollUtil.isNotEmpty(roleList)){
+            BeanUtils.copyProperties(admin, userDTO);
+            if (CollUtil.isNotEmpty(roleList)) {
                 List<String> roleStrList = roleList.stream().map(item -> item.getId() + "_" + item.getName()).collect(Collectors.toList());
                 userDTO.setRoles(roleStrList);
             }
@@ -154,17 +144,29 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public UmsAdmin getCurrentAdmin() {
         String userStr = request.getHeader(AuthConstant.USER_TOKEN_HEADER);
-        if(StrUtil.isEmpty(userStr)){
+        if (StrUtil.isEmpty(userStr)) {
             Asserts.fail(ResultCode.UNAUTHORIZED);
         }
         UserDto userDto = JSONUtil.toBean(userStr, UserDto.class);
         UmsAdmin admin = adminCacheService.getAdmin(userDto.getId());
-        if(admin!=null){
+        if (admin != null) {
             return admin;
-        }else{
+        } else {
             admin = adminMapper.selectByPrimaryKey(userDto.getId());
             adminCacheService.setAdmin(admin);
             return admin;
         }
+    }
+
+    @Override
+    public List<UmsAdmin> list(String keyword, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        UmsAdminExample adminExample = new UmsAdminExample();
+        UmsAdminExample.Criteria criteria = adminExample.createCriteria();
+        if (!StringUtils.isEmpty(keyword)){
+            criteria.andUsernameLike("%" + keyword + "%");
+            adminExample.or().andNickNameLike("%" + keyword + "%");
+        }
+        return adminMapper.selectByExample(adminExample);
     }
 }

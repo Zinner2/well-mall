@@ -48,4 +48,13 @@ public interface UserAdminService {
      * @return
      */
     UmsAdmin getCurrentAdmin();
+
+    /**
+     * 分页查询用户列表
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    List<UmsAdmin> list(String keyword, Integer pageNum, Integer pageSize);
 }
