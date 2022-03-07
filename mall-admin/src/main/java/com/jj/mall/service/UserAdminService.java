@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- *  后台管理员service
+ *  后台管理Service
  * @author 任人子
  * @date 2022/2/24  - {TIME}
  */

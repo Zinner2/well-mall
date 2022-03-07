@@ -1,6 +1,6 @@
 package com.jj.mall.component;
 
-import com.jj.mall.service.UmsResourcesService;
+import com.jj.mall.service.UmsResourceService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class ResourcesRolesRulesHandle {
 
     @Resource
-    private UmsResourcesService resourceService;
+    private UmsResourceService resourceService;
 
     @PostConstruct
     public void initResourceRolesMap(){

@@ -17,15 +17,12 @@ import com.jj.mall.common.api.ResultCode;
 import com.jj.mall.common.constant.AuthConstant;
 import com.jj.mall.common.domain.UserDto;
 import com.jj.mall.common.exception.Asserts;
-import com.jj.mall.common.utils.DataUtils;
 import com.jj.mall.mapper.UmsAdminLoginLogMapper;
 import com.jj.mall.mapper.UmsAdminMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -37,6 +34,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 后台管理ServiceImpl
+ *
  * @author 任人子
  * @date 2022/2/24  - {TIME}
  */
@@ -165,7 +164,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         PageHelper.startPage(pageNum, pageSize);
         UmsAdminExample adminExample = new UmsAdminExample();
         UmsAdminExample.Criteria criteria = adminExample.createCriteria();
-        if (!StringUtils.isEmpty(keyword)){
+        if (!StringUtils.isEmpty(keyword)) {
             criteria.andUsernameLike("%" + keyword + "%");
             adminExample.or().andNickNameLike("%" + keyword + "%");
         }
@@ -182,7 +181,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         // 查询是否有重名的用户
         adminExample.createCriteria().andUsernameEqualTo(adminParam.getUsername());
         List<UmsAdmin> umsAdminList = adminMapper.selectByExample(adminExample);
-        if(umsAdminList.size() > 0) {
+        if (umsAdminList.size() > 0) {
             return null;
         }
         umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
@@ -193,14 +192,14 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public int update(UmsAdmin umsAdmin) {
         UmsAdmin selectAdmin = adminMapper.selectByPrimaryKey(umsAdmin.getId());
-        if(umsAdmin.getPassword().equals(selectAdmin.getPassword())){
+        if (umsAdmin.getPassword().equals(selectAdmin.getPassword())) {
             //与原加密密码相同的不需要修改
             umsAdmin.setPassword(null);
-        }else{
+        } else {
             //与原加密密码不同的需要加密修改
-            if(StrUtil.isEmpty(umsAdmin.getPassword())){
+            if (StrUtil.isEmpty(umsAdmin.getPassword())) {
                 umsAdmin.setPassword(null);
-            }else{
+            } else {
                 umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
             }
         }
@@ -226,9 +225,9 @@ public class UserAdminServiceImpl implements UserAdminService {
         // 先删除原来关系
         adminRoleRelationMapper.deleteByExample(roleRelationExample);
         // 建立新的关系
-        if(!CollectionUtils.isEmpty(roleIds)){
+        if (!CollectionUtils.isEmpty(roleIds)) {
             List<UmsAdminRoleRelation> relationList = new ArrayList<>();
-            for(Long roleId : roleIds){
+            for (Long roleId : roleIds) {
                 UmsAdminRoleRelation role = new UmsAdminRoleRelation();
                 role.setRoleId(roleId);
                 role.setAdminId(adminId);

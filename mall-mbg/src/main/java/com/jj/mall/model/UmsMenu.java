@@ -4,6 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 后台菜单model
+ * @author 张俊杰
+ */
 public class UmsMenu implements Serializable {
     private Long id;
 

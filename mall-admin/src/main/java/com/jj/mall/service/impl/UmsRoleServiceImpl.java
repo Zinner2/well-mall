@@ -4,13 +4,16 @@ import com.github.pagehelper.PageHelper;
 import com.jj.mall.dao.UmsRoleDao;
 import com.jj.mall.mapper.UmsRoleMapper;
 import com.jj.mall.model.UmsMenu;
+import com.jj.mall.model.UmsMenuExample;
 import com.jj.mall.model.UmsRole;
 import com.jj.mall.model.UmsRoleExample;
+import com.jj.mall.service.UmsResourceService;
 import com.jj.mall.service.UmsRoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +29,29 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     private UmsRoleDao roleDao;
     @Resource
     private UmsRoleMapper roleMapper;
+    @Resource
+    private UmsResourceService resourceService;
+
+    @Override
+    public int updateRole(Long id, UmsRole role) {
+        role.setId(id);
+        return roleMapper.updateByPrimaryKeySelective(role);
+    }
+
+    @Override
+    public int deleteRoles(List<Long> ids) {
+        UmsRoleExample menuExample = new UmsRoleExample();
+        menuExample.createCriteria().andIdIn(ids);
+        int count = roleMapper.deleteByExample(menuExample);
+        resourceService.initResourcesRolesMap();
+        return count;
+    }
+
+    @Override
+    public int createRole(UmsRole role) {
+        role.setCreateTime(new Date());
+        return roleMapper.insert(role);
+    }
 
     @Override
     public List<UmsMenu> getMenuList(Long adminId) {

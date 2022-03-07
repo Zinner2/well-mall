@@ -4,11 +4,9 @@ import com.jj.mall.common.api.CommonPage;
 import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.model.UmsRole;
 import com.jj.mall.service.UmsRoleService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,10 +19,42 @@ import java.util.List;
  */
 @RestController()
 @RequestMapping("/role")
+@Api(tags = "umsRoleController",value = "后台角色管理")
 public class UmsRoleController {
 
     @Resource
     private UmsRoleService roleService;
+
+    @ApiOperation(value = "修改角色信息")
+    @PostMapping("/update/{id}")
+    private CommonResult<Integer> updateRole(@PathVariable Long id,
+                                             @RequestBody UmsRole role){
+        int count = roleService.updateRole(id, role);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "批量删除角色")
+    @PostMapping("/delete")
+    public CommonResult<Integer> deleteRoles(@RequestParam("ids") List<Long> ids){
+        int count = roleService.deleteRoles(ids);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "添加角色")
+    @PostMapping("/create")
+    public CommonResult<Integer> createRole(@RequestBody UmsRole role) {
+        int count = roleService.createRole(role);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
 
     @ApiOperation(value = "获取所有角色")
     @GetMapping("/listAll")

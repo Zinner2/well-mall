@@ -16,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,8 @@ public class UserAdminController {
 
     @Resource
     private UmsRoleService roleService;
+
+
 
     @ApiOperation(value = "给用户分配角色")
     @PostMapping("/role/update")
