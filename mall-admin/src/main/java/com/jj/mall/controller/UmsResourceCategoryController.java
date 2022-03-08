@@ -16,7 +16,7 @@ import java.util.List;
  * @author 任人子
  * @date 2022/3/7  - {TIME}
  */
-@Api(tags = "resourceCategory", value = "后台资源目录")
+@Api(tags = "resourceCategoryController", value = "后台资源目录")
 @RestController
 @RequestMapping("/resourceCategory")
 public class UmsResourceCategoryController {

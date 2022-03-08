@@ -1,5 +1,6 @@
 package com.jj.mall.service;
 
+import com.jj.mall.dto.UmsMenuNode;
 import com.jj.mall.model.UmsMenu;
 
 import java.util.List;
@@ -48,4 +49,18 @@ public interface UmsMenuService {
      * @return
      */
     int updateMenu(Long id, UmsMenu umsMenu);
+
+    /**
+     * 修改菜单状态
+     * @param id
+     * @param hidden
+     * @return
+     */
+    int updateHidden(Long id, Integer hidden);
+
+    /**
+     * 树形结构菜单
+     * @return
+     */
+    List<UmsMenuNode> treeList();
 }

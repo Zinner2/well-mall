@@ -23,4 +23,39 @@
             arr.admin_id = #{adminId} and m.id is not null
         group by m.id
     </select>
+    <select id="getResourceByRoleId" resultType="com.jj.mall.model.UmsResource">
+        SELECT
+            re.id id,
+            re.create_time createTime,
+            re.name name,
+            re.url url,
+            re.description description,
+            re.category_id categoryId
+        FROM
+            ums_role_resource_relation rrr
+            LEFT JOIN ums_resource re ON rrr.resource_id = re.id
+        WHERE
+            rrr.role_id = #{roleId} and  re.id is not null
+        GROUP BY
+            re.id
+    </select>
+    <select id="getMenuListByRoleId" resultType="com.jj.mall.model.UmsMenu">
+        SELECT
+            m.id id,
+            m.parent_id parentId,
+            m.create_time createTime,
+            m.title title,
+            m.level level,
+            m.sort sort,
+            m.name name,
+            m.icon icon,
+            m.hidden hidden
+        FROM
+            ums_role_menu_relation rmr
+            LEFT JOIN ums_menu m on m.id = rmr.menu_id
+        WHERE
+            rmr.role_id = #{roleId} and m.id is not null
+        GROUP BY
+            m.id
+    </select>
 </mapper>

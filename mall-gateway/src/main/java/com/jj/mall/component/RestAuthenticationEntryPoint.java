@@ -31,4 +31,5 @@ public class RestAuthenticationEntryPoint implements ServerAuthenticationEntryPo
         DataBuffer buffer =  response.bufferFactory().wrap(body.getBytes(Charset.forName("UTF-8")));
         return response.writeWith(Mono.just(buffer));
     }
+
 }

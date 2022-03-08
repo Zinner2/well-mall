@@ -2,7 +2,9 @@ package com.jj.mall.service;
 
 import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.model.UmsMenu;
+import com.jj.mall.model.UmsResource;
 import com.jj.mall.model.UmsRole;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,4 +59,36 @@ public interface UmsRoleService {
      * @return
      */
     int updateRole(Long id, UmsRole role);
+
+    /**
+     * 获取角色可用资源
+     * @param id
+     * @return
+     */
+    List<UmsResource> listResource(Long id);
+
+    /**
+     * 给角色分配资源
+     * @param roleId
+     * @param resourceList
+     * @return
+     */
+    @Transactional
+    int allocResource(Long roleId, List<Long> resourceList);
+
+    /**
+     * 角色可分配菜单
+     * @param roleId
+     * @return
+     */
+    List<UmsMenu> listMenu(Long roleId);
+
+
+    /**
+     * 给角色分配菜单
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    int allocMenu(Long roleId, List<Long> menuIds);
 }

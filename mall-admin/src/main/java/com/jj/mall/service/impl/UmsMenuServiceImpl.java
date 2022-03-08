@@ -1,17 +1,21 @@
 package com.jj.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jj.mall.dto.UmsMenuNode;
 import com.jj.mall.mapper.UmsMenuMapper;
 import com.jj.mall.model.UmsAdminExample;
 import com.jj.mall.model.UmsMenu;
 import com.jj.mall.model.UmsMenuExample;
 import com.jj.mall.service.UmsMenuService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 后台菜单管理Service
@@ -23,6 +27,39 @@ public class UmsMenuServiceImpl implements UmsMenuService {
 
     @Resource
     private UmsMenuMapper menuMapper;
+
+    @Override
+    public List<UmsMenuNode> treeList() {
+        List<UmsMenu> menuList = menuMapper.selectByExample(new UmsMenuExample());
+        List<UmsMenuNode> menuNodeList = menuList.stream()
+                                        .filter(item -> item.getParentId().equals(0L))
+                                        .map(item -> convertMenuNode(item, menuList)).collect(Collectors.toList());
+        return menuNodeList;
+    }
+
+    /**
+     * 将 UmsMenu 转换为 UmsMenuNode 并设置 Children
+     * @param menu
+     * @param menuList
+     * @return
+     */
+    public UmsMenuNode convertMenuNode(UmsMenu menu, List<UmsMenu> menuList){
+        UmsMenuNode menuNode = new UmsMenuNode();
+        BeanUtils.copyProperties(menu, menuNode);
+        List<UmsMenuNode> children = menuList.stream()
+                                        .filter(item -> menuNode.getId().equals(item.getParentId()))
+                                        .map(item -> convertMenuNode(item, menuList)).collect(Collectors.toList());
+        menuNode.setChildren(children);
+        return menuNode;
+    }
+    @Override
+    public int updateHidden(Long id, Integer hidden) {
+        hidden = hidden == 1 ? 0 : 1;
+        UmsMenu menu = new UmsMenu();
+        menu.setId(id);
+        menu.setHidden(hidden);
+        return menuMapper.updateByPrimaryKeySelective(menu);
+    }
 
     @Override
     public int updateMenu(Long id, UmsMenu umsMenu) {

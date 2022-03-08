@@ -3,10 +3,9 @@ package com.jj.mall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jj.mall.dao.UmsRoleDao;
 import com.jj.mall.mapper.UmsRoleMapper;
-import com.jj.mall.model.UmsMenu;
-import com.jj.mall.model.UmsMenuExample;
-import com.jj.mall.model.UmsRole;
-import com.jj.mall.model.UmsRoleExample;
+import com.jj.mall.mapper.UmsRoleMenuRelationMapper;
+import com.jj.mall.mapper.UmsRoleResourceRelationMapper;
+import com.jj.mall.model.*;
 import com.jj.mall.service.UmsResourceService;
 import com.jj.mall.service.UmsRoleService;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,52 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     private UmsRoleMapper roleMapper;
     @Resource
     private UmsResourceService resourceService;
+    @Resource
+    private UmsRoleMenuRelationMapper roleMenuRelationMapper;
+    @Resource
+    private UmsRoleResourceRelationMapper roleResourceRelationMapper;
+
+    @Override
+    public int allocMenu(Long roleId, List<Long> menuIds) {
+        UmsRoleMenuRelationExample example = new UmsRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        roleMenuRelationMapper.deleteByExample(example);
+        for(Long menuId : menuIds){
+            UmsRoleMenuRelation relation = new UmsRoleMenuRelation();
+            relation.setMenuId(menuId);
+            relation.setRoleId(roleId);
+            roleMenuRelationMapper.insert(relation);
+        }
+        resourceService.initResourcesRolesMap();
+        return menuIds.size();
+    }
+
+    @Override
+    public List<UmsMenu> listMenu(Long roleId) {
+        return roleDao.getMenuListByRoleId(roleId);
+    }
+
+    @Override
+    public int allocResource(Long roleId, List<Long> resourceList) {
+        UmsRoleResourceRelationExample example = new UmsRoleResourceRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        // 先删除已有关系
+        roleResourceRelationMapper.deleteByExample(example);
+        // 添加新的关系
+        for(Long resourceId : resourceList){
+            UmsRoleResourceRelation relation = new UmsRoleResourceRelation();
+            relation.setResourceId(resourceId);
+            relation.setRoleId(roleId);
+            roleResourceRelationMapper.insert(relation);
+        }
+        resourceService.initResourcesRolesMap();
+        return resourceList.size();
+    }
+
+    @Override
+    public List<UmsResource> listResource(Long roleId) {
+        return roleDao.getResourceByRoleId(roleId);
+    }
 
     @Override
     public int updateRole(Long id, UmsRole role) {

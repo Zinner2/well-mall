@@ -36,6 +36,11 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     private String applicationName;
 
     @Override
+    public List<UmsResource> listAll() {
+        return resourceMapper.selectByExample(new UmsResourceExample());
+    }
+
+    @Override
     public int updateResource(Long id, UmsResource resource) {
         resource.setId(id);
         int count = resourceMapper.updateByPrimaryKeySelective(resource);

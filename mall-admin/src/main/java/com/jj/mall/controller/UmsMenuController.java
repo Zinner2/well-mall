@@ -2,6 +2,7 @@ package com.jj.mall.controller;
 
 import com.jj.mall.common.api.CommonPage;
 import com.jj.mall.common.api.CommonResult;
+import com.jj.mall.dto.UmsMenuNode;
 import com.jj.mall.model.UmsMenu;
 import com.jj.mall.service.UmsMenuService;
 import io.swagger.annotations.Api;
@@ -18,13 +19,30 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/menu")
-@Api(tags = "umsMenuController",value = "后台菜单管理")
+@Api(tags = "umsMenuController",description = "后台菜单管理")
 public class UmsMenuController {
 
     @Resource
     private UmsMenuService menuService;
 
 
+
+    @ApiOperation(value = "树形结构菜单返回")
+    @GetMapping("/treeList")
+    public CommonResult<List<UmsMenuNode>> treeList(){
+        List<UmsMenuNode>  res = menuService.treeList();
+        return CommonResult.success(res);
+    }
+
+    @ApiOperation(value = "修改资源状态")
+    @PostMapping("/updateHidden/{id}")
+    public CommonResult<Integer> updateHidden(@PathVariable Long id, Integer hidden){
+        int count = menuService.updateHidden(id, hidden);
+        if (count > 0){
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
 
     @ApiOperation(value = "修改后台菜单")
     @PostMapping("/update/{id}")

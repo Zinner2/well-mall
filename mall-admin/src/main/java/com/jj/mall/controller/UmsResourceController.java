@@ -26,6 +26,16 @@ public class UmsResourceController {
     @Resource
     private UmsResourceService resourceService;
 
+
+    @ApiOperation(value = "查询所有后台资源")
+    @GetMapping("/listAll")
+    public CommonResult<List<UmsResource>> listAll(){
+        List<UmsResource> resourceList = resourceService.listAll();
+        if(resourceService == null){
+            return CommonResult.failed();
+        }
+        return CommonResult.success(resourceList);
+    }
     @ApiOperation(value = "修改后台资源")
     @PostMapping("/update/{id}")
     public CommonResult<Integer> updateResource(@PathVariable Long id,

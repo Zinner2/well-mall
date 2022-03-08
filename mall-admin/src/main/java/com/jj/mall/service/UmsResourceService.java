@@ -49,4 +49,10 @@ public interface UmsResourceService {
      * @return
      */
     int updateResource(Long id, UmsResource resource);
+
+    /**
+     * 获取所有后台资源
+     * @return
+     */
+    List<UmsResource> listAll();
 }

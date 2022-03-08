@@ -1,6 +1,8 @@
 package com.jj.mall.dao;
 
 import com.jj.mall.model.UmsMenu;
+import com.jj.mall.model.UmsResource;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +18,19 @@ public interface UmsRoleDao {
      * @param adminId
      * @return
      */
-    List<UmsMenu> getRoleList(Long adminId);
+    List<UmsMenu> getRoleList(@Param("adminId") Long adminId);
+
+    /**
+     * 获取角色相关资源
+     * @param roleId
+     * @return
+     */
+    List<UmsResource> getResourceByRoleId(@Param("roleId")Long roleId);
+
+    /**
+     * 获取角色相关菜单
+     * @param roleId
+     * @return
+     */
+    List<UmsMenu> getMenuListByRoleId(@Param("roleId") Long roleId);
 }
