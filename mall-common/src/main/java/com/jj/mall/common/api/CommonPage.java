@@ -18,7 +18,7 @@ public class CommonPage<T> {
    private List<T> list;
 
     /**
-     * 将PageHeleper分页后的list转换为分页信息
+     * 将PageHelper分页后的list转换为分页信息
      * @param list
      * @param <T>
      * @return

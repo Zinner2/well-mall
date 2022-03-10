@@ -1,0 +1,11 @@
+server:
+  port: 8101
+spring:
+  security:
+    user:
+      name: renrenzi
+      password: 123456
+  boot:
+    admin:
+      discovery:
+        ignored-services: ${spring.application.name}

@@ -36,6 +36,14 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     private UmsRoleResourceRelationMapper roleResourceRelationMapper;
 
     @Override
+    public int updateStatus(Long id, Integer status) {
+        UmsRole role = new UmsRole();
+        role.setId(id);
+        role.setStatus(status);
+        return roleMapper.updateByPrimaryKeySelective(role);
+    }
+
+    @Override
     public int allocMenu(Long roleId, List<Long> menuIds) {
         UmsRoleMenuRelationExample example = new UmsRoleMenuRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);

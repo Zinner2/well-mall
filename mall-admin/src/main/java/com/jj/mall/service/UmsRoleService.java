@@ -91,4 +91,12 @@ public interface UmsRoleService {
      * @return
      */
     int allocMenu(Long roleId, List<Long> menuIds);
+
+    /**
+     * 修改角色状态
+     * @param id
+     * @param status
+     * @return
+     */
+    int updateStatus(Long id, Integer status);
 }

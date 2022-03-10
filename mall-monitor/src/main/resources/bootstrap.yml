@@ -2,4 +2,4 @@ spring:
   profiles:
     active: prod
   application:
-    name: mall-auth
+    name: mall-monitor
