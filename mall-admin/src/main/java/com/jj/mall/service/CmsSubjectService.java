@@ -15,4 +15,13 @@ public interface CmsSubjectService {
      * @return
      */
     List<CmsSubject> listAll();
+
+    /**
+     * 根据专题名称分页获取专题
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    List<CmsSubject> list(String keyword, Integer pageNum, Integer pageSize);
 }

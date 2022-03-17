@@ -1,13 +1,12 @@
 package com.jj.mall.controller;
 
+import com.jj.mall.common.api.CommonPage;
 import com.jj.mall.common.api.CommonResult;
 import com.jj.mall.model.CmsSubject;
 import com.jj.mall.service.CmsSubjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -30,6 +29,15 @@ public class CmsSubjectController {
     public CommonResult<List<CmsSubject>> listAll(){
         List<CmsSubject> list = subjectService.listAll();
         return CommonResult.success(list);
-
+    }
+    @ApiOperation(value = "根据专题名称分页获取专题")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<CommonPage<CmsSubject>> getList(@RequestParam(value = "keyword", required = false) String keyword,
+                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
+        List<CmsSubject> subjectList = subjectService.list(keyword, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(subjectList));
     }
 }
+
