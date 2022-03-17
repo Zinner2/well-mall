@@ -58,8 +58,9 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     @Override
     public int createResource(UmsResource resource) {
         resource.setCreateTime(new Date());
+        int result = resourceMapper.insert(resource);
         initResourcesRolesMap();
-        return resourceMapper.insert(resource);
+        return result;
     }
 
     @Override
