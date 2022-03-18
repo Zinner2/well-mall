@@ -49,9 +49,9 @@ redis:
     common: 86400 # 24小时
 aliyun:
   oss:
-    endpoint: oss-cn-guangzhou.aliyuncs.com # oss对外服务的访问域名
-    accessKeyId: LTAI5tQdy3LYRRHaUJu8wf7E # 访问身份验证中用到用户标识
-    accessKeySecret: 8iQ6CH6LXpp5MJaGmEYkg2sd8BF6dw # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    endpoint:  # oss对外服务的访问域名
+    accessKeyId:  # 访问身份验证中用到用户标识
+    accessKeySecret:  # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
     bucketName: renrenzi # oss的存储空间
     policy:
       expire: 300 # 签名有效期(S)
